@@ -1,5 +1,6 @@
 import React from "react";
 
+
 const BannerItem = ({ image, content }) => {
   return (
     <div>
