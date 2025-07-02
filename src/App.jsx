@@ -1,11 +1,17 @@
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import Homepage from "./pages/Hompage/Homepage";
+
+import { ROUTES } from "./routes/index.";
 
 function App() {
   return (
-    <>
-      <Homepage />
-    </>
+    <BrowserRouter>
+      <Routes>
+        {ROUTES.map((item) => (
+          <Route key={item.key} path={item.path} Component={item.component} />
+        ))}
+      </Routes>
+    </BrowserRouter>
   );
 }
 
