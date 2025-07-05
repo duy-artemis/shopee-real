@@ -1,4 +1,4 @@
-import { Homepage, Login, Signup, TrangSuc } from "../pages";
+import { Homepage, Login, PageNotFound, Shop, Signup, TrangSuc } from "../pages";
 
 export const ROUTES = [
   {
@@ -21,4 +21,14 @@ export const ROUTES = [
     path: "/trang-suc/*",
     component: TrangSuc,
   },
+  {
+    key: 5,
+    path: "/shop/*",
+    component: Shop,
+  },
+  {
+    key: 6,
+    path: "/*",
+    component: PageNotFound,
+  }
 ];

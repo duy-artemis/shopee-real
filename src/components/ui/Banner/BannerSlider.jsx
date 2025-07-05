@@ -7,30 +7,6 @@ import 'swiper/css/pagination';
 import 'swiper/css';
 import styled from "styled-components";
 
-const SwiperWrapper = styled.div`
-& {
-  flex-grow: 1;
-  width: 70%;
-} 
-& .swiper-bro {
-  height: 235px !important;
-  
-}
-& .swiper-button-prev, & .swiper-button-next {
-  transition: opacity 0.5s ease;
-  background-color: rgba(0,0,0,0.3);
-}
-& .swiper-button-prev, & .swiper-button-next {
-  color: white;
-  opacity: ${({$isHover})=>$isHover ? 1 : 0};
-}
-& .swiper-pagination-bullet-active {
-  background-color: #ee4d2d !important;
-}
-& .swiper-pagination-bullet {
-  background-color: hsla(0, 0%, 100%, .4);
-}
-`;
 
 const content = [
   {
@@ -75,5 +51,30 @@ const BannerSlider = () => {
     </>
   )
 };
+
+const SwiperWrapper = styled.div`
+& {
+  flex-grow: 1;
+  width: 70%;
+} 
+& .swiper-bro {
+  height: 235px !important;
+  
+}
+& .swiper-button-prev, & .swiper-button-next {
+  transition: opacity 0.5s ease;
+  background-color: rgba(0,0,0,0.3);
+}
+& .swiper-button-prev, & .swiper-button-next {
+  color: white;
+  opacity: ${({$isHover})=>$isHover ? 1 : 0};
+}
+& .swiper-pagination-bullet-active {
+  background-color: #ee4d2d !important;
+}
+& .swiper-pagination-bullet {
+  background-color: hsla(0, 0%, 100%, .4);
+}
+`;
 
 export default BannerSlider;
