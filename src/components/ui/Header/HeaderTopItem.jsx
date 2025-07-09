@@ -9,6 +9,7 @@ const HeaderTopItem = () => {
       navigate("/home");
     }, 1000);
   };
+  const loginUser = JSON.parse(sessionStorage.getItem('login'));
   return (
     <div className="flex justify-between items-center">
       <div>
@@ -32,8 +33,8 @@ const HeaderTopItem = () => {
           <Duy to="/signup" className="text-sm text-white font-bold p-1">
             Sign Up
           </Duy>
-          <Duy to="/login" className="text-sm text-white font-bold p-1">
-            Login
+          <Duy to="/login" className={`text-sm text-white font-bold p-1 ${loginUser ? 'underline' : ''}`}>
+            {loginUser ? `hello, ${loginUser.accountName}` : 'Log In'}
           </Duy>
         </ul>
       </div>
