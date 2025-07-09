@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import BackToHomeButton from "../../components/Button/BackToHomeButton";
+import { instance } from "../../services/apis";
+import apis from "../../services/apis/auth";
 
 const Signup = () => {
   const [accountName, setAccountName] = useState("");
@@ -10,7 +12,7 @@ const Signup = () => {
 
   console.log("rerender");
 
-  if (msg.includes('Đăng ký thành công!')) {
+  if (msg.includes("Đăng ký thành công!")) {
     return <Navigate to="/login"></Navigate>;
   }
 
@@ -21,14 +23,22 @@ const Signup = () => {
       return;
     }
     try {
-      const res = await fetch('http://localhost:5001/api/register', {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ accountName, password })
-      });
-      const data = await res.json();
+      // instance({
+      //   method: "post",
+      //   url: "/api/register",
+      //   data: JSON.stringify({ accountName, password }),
+      // });
+      const data = await apis.resgister(
+        JSON.stringify({ accountName, password })
+      );
+      // const res = await fetch("http://localhost:5001/api/register", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({ accountName, password }),
+      // });
+      // const data = await res.json();
       setMsg(data.msg || "Đăng ký thành công!");
       console.log(data);
     } catch (err) {
@@ -40,9 +50,11 @@ const Signup = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-400">
       <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-sm">
         <BackToHomeButton />
-    
+
         {/* Form đăng nhậo */}
-        <h2 className="text-2xl font-bold mb-6 text-center text-blue-700">Đăng ký tài khoản</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center text-blue-700">
+          Đăng ký tài khoản
+        </h2>
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label className="block mb-1 font-medium">Tên tài khoản</label>
@@ -50,8 +62,8 @@ const Signup = () => {
               type="text"
               className="w-full p-2 border border-blue-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
               value={accountName}
-              onChange={e => {
-                setAccountName(e.target.value)
+              onChange={(e) => {
+                setAccountName(e.target.value);
                 setMsg("");
               }}
               placeholder="Nhập tên tài khoản"
@@ -64,8 +76,8 @@ const Signup = () => {
               type="password"
               className="w-full p-2 border border-blue-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
               value={password}
-              onChange={e => {
-                setPassword(e.target.value)
+              onChange={(e) => {
+                setPassword(e.target.value);
                 setMsg("");
               }}
               placeholder="Nhập mật khẩu"
