@@ -3,9 +3,10 @@ import { Navigate, useNavigate } from "react-router-dom";
 import BackToHomeButton from "../../components/Button/BackToHomeButton";
 import { instance } from "../../services/apis";
 import apis from "../../services/apis/auth";
-import { Button, message, Space } from "antd";
+import { Button, message, Space, Spin } from "antd";
 import authApi from "../../services/apis/auth.api";
-import useStore from "../../stores/auth/authStore";
+
+import authStore from "../../stores/auth/authStore";
 
 const Signup = () => {
   const [accountName, setAccountName] = useState("");
@@ -13,7 +14,8 @@ const Signup = () => {
   // const [msg, setMsg] = useState("");
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
-  const { bears, increasePopulation } = useStore();
+  const { setUser } = authStore();
+  const [loading, setLoading] = useState(false);
 
   const success = (msg) => {
     messageApi.open({
@@ -46,18 +48,30 @@ const Signup = () => {
       // setMsg("Vui lòng nhập đầy đủ thông tin.");
       return;
     }
+    setLoading(true);
     try {
       const data = await authApi.registerAccount({
         email: accountName,
         password: password,
       });
+      console.log(data);
+      messageApi.open({
+        type: "success",
+        content: data?.message,
+      });
+      setUser(data?.data);
+      setLoading(false);
+      navigate("/login");
     } catch (err) {
       messageApi.open({
         type: "error",
-        content: err.data.email,
+        content: err?.data?.email,
       });
+      setLoading(false);
     }
   };
+
+  if (loading) return <Spin />;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-400">
@@ -106,8 +120,6 @@ const Signup = () => {
           </button>
         </form>
         {/* {msg && <div className="mt-5 text-center text-blue-700">{msg}</div>} */}
-        <div>{bears}</div>
-        <button onClick={increasePopulation}>Click</button>
       </div>
     </div>
   );

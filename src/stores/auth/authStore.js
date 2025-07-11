@@ -1,10 +1,20 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
-const useStore = create((set) => ({
-  bears: 0,
-  increasePopulation: () => set((state) => ({ bears: state.bears + 1 })),
-  removeAllBears: () => set({ bears: 0 }),
-  updateBears: (newBears) => set({ bears: newBears }),
-}));
+const authStore = create(
+  persist(
+    (set) => ({
+      user: JSON.parse(localStorage.getItem("user-account"))?.user,
+      setUser: (newUser) => {
+        console.log("Saving user:", newUser);
+        set({ user: newUser });
+      },
+    }),
+    {
+      name: "user-account", // key in localStorage
+      // optional: add custom serialization if needed
+    }
+  )
+);
 
-export default useStore;
+export default authStore;
