@@ -4,6 +4,7 @@ export const instance = axios.create({
   baseURL: "http://localhost:5001",
   timeout: 20 * 1000,
 });
+
 // Add a request interceptor
 instance.interceptors.request.use(
   function (config) {

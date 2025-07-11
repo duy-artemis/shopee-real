@@ -14,6 +14,25 @@ const Login = () => {
   const [login, setLogin] = useState(sessionStorage.getItem('login') ? JSON.parse(sessionStorage.getItem('login')) : {isLogin: false});
 
   
+  const success = (msg) => {
+    messageApi.open({
+      type: 'success',
+      content: msg
+    });
+  };
+  const error = (msg) => {
+    messageApi.open({
+      type: 'error',
+      content: msg
+    });
+  };
+  const warning = () => {
+    messageApi.open({
+      type: 'warning',
+      content: 'This is a warning message',
+    });
+  };
+
   // navigation and remember user and update login status
   useEffect(()=>{
     if (msg === 'Correct bro') {
