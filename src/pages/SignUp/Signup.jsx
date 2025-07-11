@@ -3,8 +3,9 @@ import { Navigate, useNavigate } from "react-router-dom";
 import BackToHomeButton from "../../components/Button/BackToHomeButton";
 import { instance } from "../../services/apis";
 import apis from "../../services/apis/auth";
-import { Button, message, Space } from 'antd';
-
+import { Button, message, Space } from "antd";
+import authApi from "../../services/apis/auth.api";
+import useStore from "../../stores/auth/authStore";
 
 const Signup = () => {
   const [accountName, setAccountName] = useState("");
@@ -12,23 +13,24 @@ const Signup = () => {
   // const [msg, setMsg] = useState("");
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
+  const { bears, increasePopulation } = useStore();
 
   const success = (msg) => {
     messageApi.open({
-      type: 'success',
-      content: msg
+      type: "success",
+      content: msg,
     });
   };
   const error = (msg) => {
     messageApi.open({
-      type: 'error',
-      content: msg
+      type: "error",
+      content: msg,
     });
   };
   const warning = () => {
     messageApi.open({
-      type: 'warning',
-      content: 'This is a warning message',
+      type: "warning",
+      content: "This is a warning message",
     });
   };
 
@@ -38,8 +40,6 @@ const Signup = () => {
   //   return <Navigate to="/login"></Navigate>;
   // }
 
-
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!accountName || !password) {
@@ -47,35 +47,17 @@ const Signup = () => {
       return;
     }
     try {
-      // instance({
-      //   method: "post",
-      //   url: "/api/register",
-      //   data: JSON.stringify({ accountName, password }),
-      // });
-      const data = await apis.resgister({ accountName, password });
-      
-      // const res = await fetch("http://localhost:5001/api/register", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({ accountName, password }),
-      // });
-      // const data = await res.json();
-      // setMsg(data.msg || "Đăng ký thành công!");
-      console.log(data.data.msg);
-      success(data.data.msg);
-      setTimeout(() => {
-        navigate("/login");
-      }, 1200);
+      const data = await authApi.registerAccount({
+        email: accountName,
+        password: password,
+      });
     } catch (err) {
-      // setMsg("Có lỗi xảy ra. Thử lại sau.");
-      console.log(err.response.data);
-      error(err.response.data.msg);
+      messageApi.open({
+        type: "error",
+        content: err.data.email,
+      });
     }
   };
-
-  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-400">
@@ -124,6 +106,8 @@ const Signup = () => {
           </button>
         </form>
         {/* {msg && <div className="mt-5 text-center text-blue-700">{msg}</div>} */}
+        <div>{bears}</div>
+        <button onClick={increasePopulation}>Click</button>
       </div>
     </div>
   );
