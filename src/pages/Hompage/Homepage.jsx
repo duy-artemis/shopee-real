@@ -4,6 +4,8 @@ import Footer from "../../components/Layout/Footer";
 import Banner from "../../components/ui/Banner";
 import Category from "../../components/ProductCategory/Category/Category";
 import withAuth from "../../hoc/withAuth";
+import productApi from "../../services/apis/product.api";
+import axios from "axios";
 
 const Homepage = () => {
   // useEffect(()=>{
@@ -18,7 +20,20 @@ const Homepage = () => {
   //       console.error('Fetch error:', error)
   //     })
   // }, [])
-  console.log("Hello");
+  // const productList = {
+  //   page: '',
+  //   limit: '',
+  //   sort_by: '',
+  //   order: '',
+  //   exclude: '',
+  //   rating_filter: '',
+  //   price_max: '',
+  //   price_min: '',
+  //   name: '',
+  //   category: ''
+  // }
+
+
   return (
     <div>
       <Header />

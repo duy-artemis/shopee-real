@@ -22,7 +22,9 @@ const Login = () => {
   //     : { isLogin: false }
   // );
   const [messageApi, contextHolder] = message.useMessage();
-  const { setUser } = authStore();
+  const { setUser, user } = authStore();
+  
+
 
   // const success = (msg) => {
   //   messageApi.open({
@@ -97,10 +99,10 @@ const Login = () => {
         type: "success",
         content: data?.message,
       });
-      console.log(data);
+      // console.log(data);
       setLoading(false);
       setUser(data?.data);
-      navigate("/");
+      navigate("/"); 
     } catch (error) {
       messageApi.open({
         type: "error",
@@ -114,6 +116,10 @@ const Login = () => {
   // if (login.isLogin) {
   //   return <LoggedInAlready login={login} setLogin={setLogin} />;
   // }
+
+  if (user && Object.keys(user).length > 0) {
+    return <LoggedInAlready login={user} setLogin={setUser} />;
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-indigo-200 via-purple-200 to-pink-200">

@@ -17,7 +17,7 @@ const LoggedInAlready = ({login, setLogin}) => {
           Bạn đã đăng nhập!
         </h2>
         <div className="text-indigo-500 text-xl font-semibold text-center">
-            Xin chào, <span className="text-pink-600">{login.accountName}</span>
+            Xin chào, <span className="text-pink-600">{login.user.email}</span>
         </div>
         <p className="text-gray-500 text-center">
           Nếu bạn muốn đổi tài khoản, hãy đăng xuất để đăng nhập lại.
@@ -25,8 +25,7 @@ const LoggedInAlready = ({login, setLogin}) => {
         <button
           className="w-full py-3 bg-gradient-to-r from-pink-500 via-indigo-500 to-blue-500 hover:brightness-110 text-white rounded-xl font-semibold shadow-md transition text-lg"
           onClick={()=>{
-            setLogin(false);
-            sessionStorage.removeItem('login');
+            setLogin(null);
         }}
         >
           Đăng xuất

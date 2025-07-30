@@ -1,15 +1,17 @@
 import React from "react";
 import { NavLink as Duy, useNavigate } from "react-router-dom";
+import authStore from "../../../stores/auth/authStore";
 
 const HeaderTopItem = () => {
   const navigate = useNavigate();
+  const { user } = authStore()
   const onClickNavigate = () => {
     setTimeout(() => {
       console.log("Chao duy");
       navigate("/home");
     }, 1000);
   };
-  const loginUser = JSON.parse(sessionStorage.getItem('login'));
+  const userLength = Object.keys(user).length > 0;
   return (
     <div className="flex justify-between items-center">
       <div>
@@ -30,11 +32,11 @@ const HeaderTopItem = () => {
           >
             English
           </li>
-          <Duy to="/signup" className="text-sm text-white font-bold p-1">
+          {userLength ? '' : <Duy to="/signup" className="text-sm text-white font-bold p-1">
             Sign Up
-          </Duy>
-          <Duy to="/login" className={`text-sm text-white font-bold p-1 ${loginUser ? 'underline' : ''}`}>
-            {loginUser ? `hello, ${loginUser.accountName}` : 'Log In'}
+          </Duy>}
+          <Duy to="/login" className={`text-sm text-white font-bold p-1 ${userLength ? 'underline' : ''}`}>
+            {userLength ? `hello, ${user.user.email}` : 'Log In'}
           </Duy>
         </ul>
       </div>

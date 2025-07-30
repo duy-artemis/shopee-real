@@ -26,4 +26,4 @@ const purchaseApi = {
   }
 }
 
-export default purchaseApi
+export default purchaseApi;
