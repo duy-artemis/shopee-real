@@ -1,4 +1,5 @@
 import axios from "axios";
+import authStore from "../../stores/auth/authStore";
 
 export const instance = axios.create({
   baseURL: "https://api-ecom.duthanhduoc.com/",
@@ -10,11 +11,17 @@ export const instance = axios.create({
   },
 });
 
+
 // Add a request interceptor
 instance.interceptors.request.use(
   function (config) {
     // Do something before request is sent
-
+    const user = authStore.getState().user;
+    const token = user?.access_token;
+    console.log('Token gửi lên:', token);
+    if (token) {
+      config.headers.Authorization = token;
+    }
     return config;
   },
   function (error) {

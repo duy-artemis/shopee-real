@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 import { useLocation, useParams, Link } from 'react-router-dom'
 import withHeaderFooter from '../../hoc/withHeaderFooter'
 import productApi from '../../services/apis/product.api'
 import he from 'he'
+import purchaseApi from '../../services/apis/purchase.api'
+import authStore from '../../stores/auth/authStore'
+import { useProductStore } from '../../stores/shop/useProductStore'
 
 const ProductDetail = () => {
   const { id } = useParams()
@@ -10,6 +13,8 @@ const ProductDetail = () => {
   const product = location.state
   const [productDetail, setProductDetail] = useState(null);
   const [image, setImage] = useState();
+
+  const { cart, setCart, addToCart } = useProductStore();
 
   const loadProductDetail = async () => {
     const res = await productApi.getProductDetail(id)
@@ -91,7 +96,18 @@ const ProductDetail = () => {
             <button className="bg-pink-600 text-white font-semibold px-6 py-3 rounded-xl shadow hover:bg-pink-700 transition">
               Mua ngay
             </button>
-            <button className="bg-white text-pink-600 border border-pink-500 font-semibold px-6 py-3 rounded-xl hover:bg-pink-50 transition">
+            <button 
+            className="bg-white text-pink-600 border border-pink-500 font-semibold px-6 py-3 rounded-xl hover:bg-pink-50 transition"
+            onClick={async()=>{
+              const response = await purchaseApi.addToCart({product_id: id, buy_count: 1});
+              if (cart.length > 0) {
+                addToCart(response.data);
+              }
+              else {
+                setCart(response.data);
+              }
+            }}
+            >
               Thêm vào giỏ
             </button>
           </div>

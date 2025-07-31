@@ -1,4 +1,6 @@
+import path from "path";
 import { Homepage, Login, PageNotFound, Shop, Signup, TrangSuc } from "../pages";
+import Cart from "../pages/Cart/Cart";
 
 export const ROUTES = [
   {
@@ -30,5 +32,10 @@ export const ROUTES = [
     key: 6,
     path: "/*",
     component: PageNotFound,
+  },
+  {
+    key: 7,
+    path: "/cart",
+    component: Cart
   }
 ];
