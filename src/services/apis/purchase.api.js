@@ -28,6 +28,12 @@ const purchaseApi = {
   getPurchases: ({status}) => {
     return instance.get(URL, {params: {status}})
   },
+  buyProducts: (productList) => {
+    return instance.post(`${URL}/buy-products`, productList)
+  },
+  updatePurchase: ({ product_id, buy_count }) => {
+    return instance.put(`${URL}/update-purchase`, {product_id, buy_count})
+  },
   deletePurchase: (purchaseIds) => {
     return instance.delete(URL, {data: purchaseIds})
   }

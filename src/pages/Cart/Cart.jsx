@@ -5,10 +5,14 @@ import purchaseApi from "../../services/apis/purchase.api";
 
 const Cart = () => {
 
-//   const { cart } = useProductStore();
-
 
   const [items, setItems] = useState([]);
+
+  let totalCart = 0;
+
+  items.forEach((item) => {
+    totalCart += item.price;
+  })
 
   let loadPurchases = async () => {
     const response = await purchaseApi.getPurchases({status: -1});
@@ -54,34 +58,44 @@ const Cart = () => {
         ) : (
           <>
             <ul className="divide-y divide-gray-200">
-              {items.map((item) => (
-                <li key={item.id} className="flex py-4 items-center">
-                  <img
+            {items.map((item) => (
+                <li key={item._id} className="flex py-4 items-center">
+                <img
                     src={item.product.image}
                     alt={item.product.name}
                     className="w-16 h-16 object-cover rounded-xl mr-4 border"
-                  />
-                  <div className="flex-1">
-                    <div className="text-lg font-medium">{item.name}</div>
-                    <div className="text-sm text-gray-400">
-                      x{item.buy_count} • ${item.price}
+                />
+                <div className="flex-1">
+                    <div className="text-lg font-medium">{item.product.name}</div>
+                    <div className="text-sm text-gray-400 flex items-center gap-2">
+                    <button
+                        className="px-2 py-1 bg-gray-100 rounded hover:bg-gray-200 text-lg font-bold"
+                        onClick={''}
+                        disabled={item.buy_count <= 1}
+                    >-</button>
+                    <span className="mx-2">{item.buy_count}</span>
+                    <button
+                        className="px-2 py-1 bg-gray-100 rounded hover:bg-gray-200 text-lg font-bold"
+                        onClick={''}
+                    >+</button>
+                    <span className="ml-2">{item.price.toLocaleString()} VND</span>
                     </div>
-                  </div>
-                  <button
+                </div>
+                <button
                     className="text-red-500 hover:underline ml-6"
-                    onClick={async() => {
-                        purchaseApi.deletePurchase([item._id]);
-                        loadPurchases();
+                    onClick={async () => {
+                    await purchaseApi.deletePurchase([item._id]);
+                    loadPurchases();
                     }}
-                  >
+                >
                     Remove
-                  </button>
+                </button>
                 </li>
-              ))}
+            ))}
             </ul>
             <div className="flex justify-between items-center mt-10">
               <span className="text-xl font-bold">
-                Total: <span className="text-pink-600">$</span>
+                Total: <span className="text-pink-600">{totalCart.toLocaleString()} VND</span>
               </span>
               <button
                 
