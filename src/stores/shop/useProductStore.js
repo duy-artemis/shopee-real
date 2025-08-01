@@ -7,10 +7,4 @@ export const useProductStore = create((set) => ({
   setProduct: (data) => {
     set({products: data})
   },
-  setCart: (item) => set({
-    cart: [item]
-  }),
-  addToCart: (item) => set((state) => ({
-    cart: [...state.cart, item]
-  }))
 }));

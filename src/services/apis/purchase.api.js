@@ -24,6 +24,12 @@ const purchaseApi = {
   // }
   addToCart: ({product_id, buy_count}) => {
     return instance.post(`${URL}/add-to-cart`, {product_id, buy_count});
+  },
+  getPurchases: ({status}) => {
+    return instance.get(URL, {params: {status}})
+  },
+  deletePurchase: (purchaseIds) => {
+    return instance.delete(URL, {data: purchaseIds})
   }
 }
 

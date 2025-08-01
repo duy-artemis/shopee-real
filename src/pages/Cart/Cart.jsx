@@ -1,12 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom"; // Nếu xài react-router
 import { useProductStore } from "../../stores/shop/useProductStore";
+import purchaseApi from "../../services/apis/purchase.api";
 
 const Cart = () => {
 
-  const { cart } = useProductStore();
+//   const { cart } = useProductStore();
 
-  const items = cart;
+
+  const [items, setItems] = useState([]);
+
+  let loadPurchases = async () => {
+    const response = await purchaseApi.getPurchases({status: -1});
+    setItems(response.data);
+    console.log(response);
+  }
+
+  useEffect(()=>{
+    loadPurchases();
+  },[])
+
 
   console.log(items);
   return (
@@ -56,7 +69,10 @@ const Cart = () => {
                   </div>
                   <button
                     className="text-red-500 hover:underline ml-6"
-                    onClick={() => onRemove(item.id)}
+                    onClick={async() => {
+                        purchaseApi.deletePurchase([item._id]);
+                        loadPurchases();
+                    }}
                   >
                     Remove
                   </button>
