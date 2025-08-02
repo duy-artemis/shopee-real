@@ -1,6 +1,7 @@
 import path from "path";
 import { Homepage, Login, PageNotFound, Shop, Signup, TrangSuc } from "../pages";
 import Cart from "../pages/Cart/Cart";
+import ThankYou from "../pages/ThankYou/ThankYou";
 
 export const ROUTES = [
   {
@@ -37,5 +38,10 @@ export const ROUTES = [
     key: 7,
     path: "/cart",
     component: Cart
+  },
+  {
+    key: 8,
+    path: "/thank-you",
+    component: ThankYou
   }
 ];

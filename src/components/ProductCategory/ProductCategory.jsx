@@ -9,12 +9,10 @@ import { useProductStore } from '../../stores/shop/useProductStore';
 
 const ProductCategory = () => {
   const param = useParams();
-  // const [data, setData] = useState([]);
-  const data = useProductStore(state => state.products);
+  let products = useProductStore(state => state.products);
   const setProduct = useProductStore (state => state.setProduct);
 
-  console.log(data);
-  
+  console.log(products);
   const paramCheked = [
     'fashion', 
     'mobile-tablet'
@@ -26,17 +24,21 @@ const ProductCategory = () => {
     )
   }
 
+  let data = [];
+  if (param.id === 'fashion') {
+    data = products.filter((item)=>item.category.name === "Áo thun");
+  }
+  else {
+    data = products.filter((item)=>item.category.name !== "Áo thun");
+  }
+
   const loadProducts = async() => {
+    if (data.length > 0) {
+      return;
+    }
     const response = await productApi.getAllProducts();
     let result = response.data.products;
-    const filterMobile= result.filter((item)=>item.category.name !== "Áo thun");
-    const filterFashion = result.filter((item)=>item.category.name === "Áo thun");
-    if (param.id === "fashion") {
-      setProduct(filterFashion);
-    }
-    else {
-      setProduct(filterMobile);
-    }
+    setProduct(result);
   }
 
 

@@ -1,18 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom"; // Nếu xài react-router
+import { Link, useNavigate } from "react-router-dom"; // Nếu xài react-router
 import { useProductStore } from "../../stores/shop/useProductStore";
 import purchaseApi from "../../services/apis/purchase.api";
 
 const Cart = () => {
-
-
   const [items, setItems] = useState([]);
+  const navigate = useNavigate();
+  const { setCheckOut } = useProductStore();
 
+  // Calculate total cart
   let totalCart = 0;
-
   items.forEach((item) => {
     totalCart += item.price;
+  });
+
+  // Calculate checkout
+  let checkout = []
+  items.forEach((item)=>{
+    let product = {
+      product_id: item.product._id,
+      buy_count: item.buy_count
+    }
+    checkout.push(product);
   })
+
+  console.log(checkout);
 
   let loadPurchases = async () => {
     const response = await purchaseApi.getPurchases({status: -1});
@@ -32,7 +44,7 @@ const Cart = () => {
         {/* Back to Home */}
         <div className="mb-8 flex justify-between items-center">
           <Link
-            to="/"
+            to="/shop"
             className="inline-flex items-center gap-2 text-pink-600 hover:text-pink-800 font-semibold transition"
           >
             <svg
@@ -45,7 +57,7 @@ const Cart = () => {
             >
               <path d="M15 19l-7-7 7-7" />
             </svg>
-            Back to Home
+            Back to Shop
           </Link>
           <h2 className="text-3xl font-bold text-gray-800 tracking-tight">
             🛒 Shopping Cart
@@ -70,13 +82,26 @@ const Cart = () => {
                     <div className="text-sm text-gray-400 flex items-center gap-2">
                     <button
                         className="px-2 py-1 bg-gray-100 rounded hover:bg-gray-200 text-lg font-bold"
-                        onClick={''}
-                        disabled={item.buy_count <= 1}
+                        onClick={async()=>{
+                          if (item.buy_count <= 1) {
+                            await purchaseApi.deletePurchase([item._id]);
+                            loadPurchases();
+                            return;
+                          }
+                          let newCount = item.buy_count - 1;
+                          await purchaseApi.updatePurchase({product_id: item.product._id, buy_count: newCount});
+                          loadPurchases();
+                        }}
+                        // disabled={item.buy_count <= 1}
                     >-</button>
                     <span className="mx-2">{item.buy_count}</span>
                     <button
                         className="px-2 py-1 bg-gray-100 rounded hover:bg-gray-200 text-lg font-bold"
-                        onClick={''}
+                        onClick={async()=>{
+                          let newCount = item.buy_count + 1;
+                          await purchaseApi.updatePurchase({product_id: item.product._id, buy_count: newCount});
+                          loadPurchases();
+                        }}
                     >+</button>
                     <span className="ml-2">{item.price.toLocaleString()} VND</span>
                     </div>
@@ -98,7 +123,14 @@ const Cart = () => {
                 Total: <span className="text-pink-600">{totalCart.toLocaleString()} VND</span>
               </span>
               <button
-                
+                onClick={async()=>{
+                  await purchaseApi.buyProducts(checkout);
+                  loadPurchases();
+                  setCheckOut(items);
+                  setTimeout(()=>{
+                    navigate('/thank-you');
+                  }, 1000)
+                }}
                 className="bg-pink-600 hover:bg-pink-700 text-white font-semibold px-6 py-3 rounded-xl shadow transition"
               >
                 Checkout

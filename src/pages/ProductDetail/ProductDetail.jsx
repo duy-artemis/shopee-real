@@ -1,5 +1,5 @@
 import React, { use, useEffect, useState } from 'react'
-import { useLocation, useParams, Link } from 'react-router-dom'
+import { useLocation, useParams, Link, useNavigate } from 'react-router-dom'
 import withHeaderFooter from '../../hoc/withHeaderFooter'
 import productApi from '../../services/apis/product.api'
 import he from 'he'
@@ -12,6 +12,7 @@ const ProductDetail = () => {
   const product = location.state
   const [productDetail, setProductDetail] = useState(null);
   const [image, setImage] = useState();
+  const navigate = useNavigate();
 
 
   const loadProductDetail = async () => {
@@ -91,13 +92,21 @@ const ProductDetail = () => {
           </div>
 
           <div className="flex gap-4">
-            <button className="bg-pink-600 text-white font-semibold px-6 py-3 rounded-xl shadow hover:bg-pink-700 transition">
+            <button 
+            className="bg-pink-600 text-white font-semibold px-6 py-3 rounded-xl shadow hover:bg-pink-700 transition"
+            onClick={async()=>{
+              await purchaseApi.addToCart({product_id: id, buy_count: 1});
+              setTimeout(()=>{
+                navigate('/cart');
+              }, 1000)
+            }}
+            >
               Mua ngay
             </button>
             <button 
             className="bg-white text-pink-600 border border-pink-500 font-semibold px-6 py-3 rounded-xl hover:bg-pink-50 transition"
             onClick={async()=>{
-              const response = await purchaseApi.addToCart({product_id: id, buy_count: 1});
+              await purchaseApi.addToCart({product_id: id, buy_count: 1});
             }}
             >
               Thêm vào giỏ

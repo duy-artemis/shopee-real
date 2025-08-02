@@ -3,8 +3,11 @@ import { create } from "zustand";
 
 export const useProductStore = create((set) => ({
   products: [],
-  cart: [],
+  checkout: [],
   setProduct: (data) => {
     set({products: data})
   },
+  setCheckOut: (data) => {
+    set({checkout: data})
+  }
 }));
