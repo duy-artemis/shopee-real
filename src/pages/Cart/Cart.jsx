@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom"; // Nếu xài react-router
+import { Link, NavLink, useNavigate } from "react-router-dom"; // Nếu xài react-router
 import { useProductStore } from "../../stores/shop/useProductStore";
 import purchaseApi from "../../services/apis/purchase.api";
 
@@ -8,20 +8,15 @@ const Cart = () => {
   const navigate = useNavigate();
   const { setCheckOut } = useProductStore();
 
-  // Calculate total cart
-  let totalCart = 0;
-  items.forEach((item) => {
-    totalCart += item.price;
-  });
+
+  let totalCart = items.length > 0 ? items.reduce((sum, item) => sum + item.price, 0) : 0;
 
   // Calculate checkout
-  let checkout = []
-  items.forEach((item)=>{
-    let product = {
+  let checkout = items.map((item)=>{
+    return {
       product_id: item.product._id,
       buy_count: item.buy_count
     }
-    checkout.push(product);
   })
 
   console.log(checkout);
@@ -72,13 +67,17 @@ const Cart = () => {
             <ul className="divide-y divide-gray-200">
             {items.map((item) => (
                 <li key={item._id} className="flex py-4 items-center">
-                <img
-                    src={item.product.image}
-                    alt={item.product.name}
-                    className="w-16 h-16 object-cover rounded-xl mr-4 border"
-                />
+                <NavLink to={`/shop/${item.product.category.name === "Áo thun" ? "fashion" : "mobile-tablet"}/${item.product._id}`}>
+                  <img
+                      src={item.product.image}
+                      alt={item.product.name}
+                      className="w-16 h-16 object-cover rounded-xl mr-4 border"
+                  />
+                </NavLink>
                 <div className="flex-1">
-                    <div className="text-lg font-medium">{item.product.name}</div>
+                    <NavLink to={`/shop/${item.product.category.name === "Áo thun" ? "fashion" : "mobile-tablet"}/${item.product._id}`}>
+                      <div className="text-lg font-medium">{item.product.name}</div>
+                    </NavLink>
                     <div className="text-sm text-gray-400 flex items-center gap-2">
                     <button
                         className="px-2 py-1 bg-gray-100 rounded hover:bg-gray-200 text-lg font-bold"
@@ -107,7 +106,7 @@ const Cart = () => {
                     </div>
                 </div>
                 <button
-                    className="text-red-500 hover:underline ml-6"
+                    className="text-red-500 hover:underline ml-6 cursor-pointer"
                     onClick={async () => {
                     await purchaseApi.deletePurchase([item._id]);
                     loadPurchases();
@@ -131,7 +130,7 @@ const Cart = () => {
                     navigate('/thank-you');
                   }, 1000)
                 }}
-                className="bg-pink-600 hover:bg-pink-700 text-white font-semibold px-6 py-3 rounded-xl shadow transition"
+                className="bg-pink-600 hover:bg-pink-700 text-white font-semibold px-6 py-3 rounded-xl shadow transition cursor-pointer"
               >
                 Checkout
               </button>

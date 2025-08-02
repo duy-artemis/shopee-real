@@ -1,6 +1,6 @@
 import React from 'react'
 import { Header } from '../components/Layout/Header'
-import { Footer } from 'antd/es/layout/layout';
+import Footer  from '../components/Layout/Footer';
 
 const withHeaderFooter = (Component) => {
     function InnerComponent () {

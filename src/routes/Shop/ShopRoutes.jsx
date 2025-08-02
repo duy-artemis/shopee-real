@@ -1,10 +1,10 @@
 import React from 'react'
-import { Route, Routes } from 'react-router-dom'
+import ShopPage from '../../pages/Shop/ShopPage'
 import ProductCategory from '../../components/ProductCategory/ProductCategory'
-import ProductDetail from '../ProductDetail/ProductDetail'
-import ShopPage from './ShopPage'
+import ProductDetail from '../../pages/ProductDetail/ProductDetail'
+import { Route, Routes } from 'react-router-dom'
 
-const Shop = () => {
+const ShopRoutes = () => {
   return (
     <>
         <Routes>
@@ -16,4 +16,4 @@ const Shop = () => {
   )
 }
 
-export default Shop
+export default ShopRoutes

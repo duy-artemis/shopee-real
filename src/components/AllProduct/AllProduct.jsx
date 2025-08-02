@@ -7,7 +7,7 @@ import productApi from '../../services/apis/product.api';
 import { useProductStore } from '../../stores/shop/useProductStore';
 
 
-const ProductCategory = () => {
+const AllProduct = () => {
   const param = useParams();
   const data = useProductStore(state => state.products);
   const setProduct = useProductStore (state => state.setProduct);
@@ -33,12 +33,12 @@ const ProductCategory = () => {
   
   return (
     <>
-      {data.length > 0 ? <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 py-4">
+      {data.length > 0 ? <div className="container mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 py-4">
         {data.map((item)=>{
           return (
           <Link
             state={item}
-            to={`/shop/${param.id}/${item._id}`}
+            to={`/shop/${item.category.name === "Áo thun" ? 'fashion' : 'mobile-tablet'}/${item._id}`}
             key={item.id}
             className="bg-white border border-gray-100 rounded-2xl shadow-md hover:shadow-xl transition-all duration-200 group cursor-pointer flex flex-col items-center p-4"
           >
@@ -65,4 +65,4 @@ const ProductCategory = () => {
   )
 }
 
-export default withHeaderFooter(ProductCategory);
+export default AllProduct;

@@ -51,7 +51,7 @@ const ProductCategory = () => {
   
   return (
     <>
-      {data.length > 0 ? <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 py-4">
+      {data.length > 0 ? <div className="container mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 py-4">
         {data.map((item)=>{
           return (
           <Link

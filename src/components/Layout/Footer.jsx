@@ -39,7 +39,7 @@ const Footer = () => (
       <div className="md:col-span-1">
         <div className="font-bold mb-4 text-base">PAYMENT</div>
         <div className="grid grid-cols-3 gap-2 mb-5">
-          <img src="https://cdn.sstatic.net/Img/visa.png" alt="Visa" className="w-9 h-6 object-contain bg-white rounded shadow" />
+          <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" className="w-9 h-6 object-contain bg-white rounded shadow" />
           <img src="https://cdn.sstatic.net/Img/mastercard.png" alt="Mastercard" className="w-9 h-6 object-contain bg-white rounded shadow" />
           <img src="https://cdn.sstatic.net/Img/discover.png" alt="Discover" className="w-9 h-6 object-contain bg-white rounded shadow" />
           {/* Thay bằng icon thật ở dự án, đây demo */}
