@@ -40,15 +40,11 @@ const ProductCategory = () => {
     setProduct(result);
   }
 
-  const loadCart = async() => {
-    const response = await purchaseApi.getPurchases({status: -1});
-    setCart(response.data);
-  }
 
   useEffect(()=>{
     setTimeout(()=>{
       loadProducts();
-      loadCart();
+      fetchAll();
     }, 1000)
   }, []);
 

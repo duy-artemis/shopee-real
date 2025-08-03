@@ -1,25 +1,91 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { use, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackToHomeButton from "../../components/Button/BackToHomeButton";
 import userApi from "../../services/apis/user.api";
 import { message } from "antd";
+import { useProductStore } from "../../stores/shop/useProductStore";
+import Password from "antd/es/input/Password";
 
 const LoggedInAlready = ({ login, setLogin }) => {
-  const [profile, setProfile] = useState({});
+  const {profileDetail, setProfileDetail, fetchAll, fetchProfile} = useProductStore();
+  // const [profile, setProfile] = useState(profileDetail);
+  const profile = profileDetail;
   const [showEditInfo, setShowEditInfo] = useState(false);
   const [showEditAvatar, setShowEditAvatar] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
+  const [currentPassword, setCurrentPassword] = useState();
+  const [newPassword, setNewPassword] = useState();
+  const [email, setEmail] = useState();
+  const [showPwdEdit, setShowPwdEdit] = useState(false);
+  const [showEmailEdit, setShowEmailEdit] = useState(false);
   const navigate = useNavigate();
 
   const inputElement = useRef();
 
-  const loadProfile = async () => {
-    const response = await userApi.getProfile();
-    setProfile(response.data);
-  };
+  // const loadProfile = async () => {
+  //   const response = await userApi.getProfile();
+  //   setProfileDetail(response.data);
+  //   setProfile(response.data);
+  // };
+
+  
   useEffect(() => {
-    loadProfile();
+    if (Object.keys(profile).length === 0) {
+      fetchAll();
+      return;
+    }
   }, []);
+
+  useEffect(() => {
+    if (showEditInfo) {
+      setEmail(profile.email || '');
+      setCurrentPassword('');
+      setNewPassword('');
+      setShowEmailEdit(false);
+      setShowPwdEdit(false);
+    }
+  }, [showEditInfo, profile]);
+
+
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+    const payload = {}
+    if (showEmailEdit) {
+      payload.email = email
+    }
+    if (showPwdEdit) {
+      payload.password = currentPassword,
+      payload.newPassword = newPassword
+    }
+    if (showEmailEdit && showPwdEdit) {
+      payload.email = email
+      payload.password = currentPassword,
+      payload.newPassword = newPassword
+    }
+    if (Object.keys(payload).length === 0) {
+      messageApi.open({
+        type: "warning",
+        content: "Bạn chưa đổi gì để cập nhật.",
+      });
+      return;
+    }
+    try {
+      const res = await userApi.updateProfile(payload);
+      messageApi.open({
+        type: "success",
+        content: res.message,
+      });
+      fetchProfile();
+    }
+    catch(error) {
+      messageApi.open({
+        type: "error",
+        content: typeof error.data === 'object'
+          ? Object.values(error.data).join(', ')
+          : error.data?.message || 'Có lỗi xảy ra'
+      })
+    }
+  }
 
   const avatar = profile.avatar && !profile.avatar.includes("undefined")
     ? profile.avatar
@@ -43,9 +109,66 @@ const LoggedInAlready = ({ login, setLogin }) => {
               <span className="text-indigo-600 text-2xl">✏️</span>
               Cập nhật thông tin
             </div>
-            <div className="text-gray-500">
-              (Ở đây bạn làm form edit profile tuỳ ý nha bro!)
-            </div>
+            <form className="text-gray-500"
+            onSubmit={handleSubmit}
+            >
+              <label className="flex items-center gap-2 text-gray-600">
+                <input
+                  type="checkbox"
+                  className="accent-pink-500"
+                  checked={showEmailEdit}
+                  onChange={() => setShowEmailEdit((v) => !v)}
+                />
+                Đổi email
+              </label>
+              {showEmailEdit && (
+                <input
+                  type="email"
+                  className="w-full px-3 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-pink-200 transition"
+                  placeholder="Nhập email mới"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="email"
+                />
+              )}
+              <label className="flex items-center gap-2 text-gray-600 cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="accent-pink-500"
+                  checked={showPwdEdit}
+                  onChange={() => setShowPwdEdit((v) => !v)}
+                />
+                Đổi mật khẩu
+              </label>
+              {showPwdEdit && (
+                <>
+                  <input
+                    type="password"
+                    className="w-full px-3 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-pink-200 transition"
+                    placeholder="Mật khẩu hiện tại"
+                    value={currentPassword}
+                    onChange={(e) => setCurrentPassword(e.target.value)}
+                    required
+                    autoComplete="current-password"
+                  />
+                  <input
+                    type="password"
+                    className="w-full mt-1.5 px-3 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-pink-200 transition"
+                    placeholder="Mật khẩu mới"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    required
+                    autoComplete="new-password"
+                  />
+                </>
+              )}
+              <button
+                type="submit"
+                className={`w-full py-2 mt-1.5 bg-pink-600 hover:bg-pink-700 text-white rounded-xl font-semibold shadow transition`}
+              >
+                Cập nhật
+              </button>
+            </form>
           </div>
         </div>
       )}
@@ -68,7 +191,7 @@ const LoggedInAlready = ({ login, setLogin }) => {
             formData.append("image", file);
             const res = await userApi.uploadAvatar(formData);
             await userApi.updateProfile({avatar: res.data})
-            loadProfile();
+            fetchProfile();
             setShowEditAvatar(false)
           }}
           >

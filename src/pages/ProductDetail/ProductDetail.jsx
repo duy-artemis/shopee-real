@@ -27,35 +27,21 @@ const ProductDetail = () => {
   }
 
   const loadProductDetail = async function name(params) {
-    if (productDetail.length > 0) {
-      return;
-    }
     const res = await productApi.getProductDetail(id);
     const description = he.decode(res.data.description);
     setProductDetail(res.data);
     setProductDescription(description);
   }
   
-  const loadProducts = async() => {
-    const response = await productApi.getAllProducts();
-    let result = response.data.products;
-    setProduct(result);
-  }
-
-  const loadCart = async() => {
-    const response = await purchaseApi.getPurchases({status: -1});
-    setCart(response.data);
-  }
 
   useEffect(() => {
-    setTimeout(()=>{
-      loadProductDescription();
-    }, 500);
-
+    loadProductDescription();
+    if (productDetail.length > 0) {
+      return;
+    }
     // If user click reload
     loadProductDetail();
-    loadProducts();
-    loadCart();
+    fetchAll();
   }, []);
 
   const product = Array.isArray(productDetail)

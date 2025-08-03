@@ -5,7 +5,7 @@ import purchaseApi from "../../services/apis/purchase.api";
 
 const Cart = () => {
   const navigate = useNavigate();
-  const { setCheckOut, setCart, cart } = useProductStore();
+  const { setCheckOut, setCart, cart, fetchAll } = useProductStore();
   const [items, setItems] = useState(cart);
 
   console.log(cart);
@@ -32,6 +32,7 @@ const Cart = () => {
       return;
     }
     loadPurchases();
+    fetchAll();
   },[])
 
 

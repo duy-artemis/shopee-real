@@ -36,12 +36,11 @@ const Login = () => {
       console.log(error);
       messageApi.open({
         type: "error",
-        content: error?.data?.email,
+        content: Object.values(error?.data).join(', '),
       });
       setLoading(false);
     }
   };
-  if (loading) return <Spin />;
 
 
   if (user && Object.keys(user).length > 0) {

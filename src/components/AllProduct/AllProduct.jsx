@@ -11,7 +11,7 @@ import purchaseApi from '../../services/apis/purchase.api';
 const AllProduct = () => {
   const param = useParams();
   const data = useProductStore(state => state.products);
-  const { setProduct, setCart, fetchAll } = useProductStore();
+  const { setProduct, setCart, fetchAll, fetchProducts } = useProductStore();
   console.log(data)
   
 
@@ -21,19 +21,12 @@ const AllProduct = () => {
     setProduct(result);
   }
 
-  const loadCart = async() => {
-    const response = await purchaseApi.getPurchases({status: -1});
-    setCart(response.data);
-  }
 
   useEffect(()=>{
     if (data.length > 0) {
       return;
     }
-    setTimeout(()=>{
-      loadProducts();
-      loadCart();
-    }, 1000)
+    fetchAll();
   }, []);
 
   
