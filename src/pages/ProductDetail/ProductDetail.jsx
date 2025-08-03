@@ -11,13 +11,13 @@ import { Spin } from 'antd'
 
 const ProductDetail = () => {
   const { id } = useParams()
-  const { products } = useProductStore();
+  const { products, setCart, setProduct, fetchAll } = useProductStore();
   const [productDetail, setProductDetail] = useState(products.filter((item)=>item._id === id));
   const [productDescription, setProductDescription] = useState(null);
   const [image, setImage] = useState();
   const navigate = useNavigate();
 
-  console.log(products.map((item)=>item._id));
+  console.log(productDetail);
 
   const loadProductDescription = async () => {
     const res = await productApi.getProductDetail(id);
@@ -36,19 +36,34 @@ const ProductDetail = () => {
     setProductDescription(description);
   }
   
+  const loadProducts = async() => {
+    const response = await productApi.getAllProducts();
+    let result = response.data.products;
+    setProduct(result);
+  }
+
+  const loadCart = async() => {
+    const response = await purchaseApi.getPurchases({status: -1});
+    setCart(response.data);
+  }
 
   useEffect(() => {
     setTimeout(()=>{
       loadProductDescription();
-    }, 1000)
+    }, 500);
+
     // If user click reload
     loadProductDetail();
+    loadProducts();
+    loadCart();
   }, []);
 
+  const product = Array.isArray(productDetail)
+    ? productDetail[0]
+    : productDetail;
 
-  console.log(productDetail);
 
-  if (productDetail.length === 0) {
+  if (!product) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[300px]">
         <div className="text-xl font-bold text-red-500 mb-3">Không tìm thấy sản phẩm!</div>
@@ -59,7 +74,7 @@ const ProductDetail = () => {
     )
   }
   else {
-    const { name, price, price_before_discount, images, sold, view } = products.length > 0 ? productDetail[0] : productDetail;
+    const { name, price, price_before_discount, images, sold, view } = product;
 
     return (
 
@@ -122,6 +137,8 @@ const ProductDetail = () => {
               className="bg-pink-600 text-white font-semibold px-6 py-3 rounded-xl shadow hover:bg-pink-700 transition cursor-pointer"
               onClick={async()=>{
                 await purchaseApi.addToCart({product_id: id, buy_count: 1});
+                const response = await purchaseApi.getPurchases({status: -1});
+                setCart(response.data);
                 navigate('/cart');
               }}
               >
@@ -131,6 +148,8 @@ const ProductDetail = () => {
               className="bg-white text-pink-600 border border-pink-500 font-semibold px-6 py-3 rounded-xl hover:bg-pink-50 transition cursor-pointer"
               onClick={async()=>{
                 await purchaseApi.addToCart({product_id: id, buy_count: 1});
+                const response = await purchaseApi.getPurchases({status: -1});
+                setCart(response.data);
               }}
               >
                 Thêm vào giỏ

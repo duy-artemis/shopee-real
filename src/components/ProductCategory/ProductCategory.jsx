@@ -9,8 +9,7 @@ import { useProductStore } from '../../stores/shop/useProductStore';
 
 const ProductCategory = () => {
   const param = useParams();
-  let products = useProductStore(state => state.products);
-  const setProduct = useProductStore (state => state.setProduct);
+  const {products, setProduct, setCart, fetchAll} = useProductStore();
 
   console.log(products);
   const paramCheked = [
@@ -41,10 +40,15 @@ const ProductCategory = () => {
     setProduct(result);
   }
 
+  const loadCart = async() => {
+    const response = await purchaseApi.getPurchases({status: -1});
+    setCart(response.data);
+  }
 
   useEffect(()=>{
     setTimeout(()=>{
       loadProducts();
+      loadCart();
     }, 1000)
   }, []);
 

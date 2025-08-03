@@ -7,87 +7,16 @@ import { message, Spin } from "antd";
 import authStore from "../../stores/auth/authStore";
 
 const Login = () => {
-  // const [msg, setMsg] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  // const storeUser = localStorage.getItem("user")
-  //   ? JSON.parse(localStorage.getItem("user"))
-  //   : "";
-  // const [checkbox, setCheckBox] = useState(storeUser ? true : false);
   const [accountName, setAccountName] = useState();
   const [password, setPassword] = useState();
-  // const [login, setLogin] = useState(
-  //   sessionStorage.getItem("login")
-  //     ? JSON.parse(sessionStorage.getItem("login"))
-  //     : { isLogin: false }
-  // );
   const [messageApi, contextHolder] = message.useMessage();
   const { setUser, user } = authStore();
   
 
-
-  // const success = (msg) => {
-  //   messageApi.open({
-  //     type: "success",
-  //     content: msg,
-  //   });
-  // };
-  // const error = (msg) => {
-  //   messageApi.open({
-  //     type: "error",
-  //     content: msg,
-  //   });
-  // };
-  // const warning = () => {
-  //   messageApi.open({
-  //     type: "warning",
-  //     content: "This is a warning message",
-  //   });
-  // };
-
-  // navigation and remember user and update login status
-  // useEffect(() => {
-  //   if (msg === "Correct bro") {
-  //     // remember account
-  //     const rememberUser = { accountName, password };
-  //     if (checkbox) {
-  //       localStorage.setItem("user", JSON.stringify(rememberUser));
-  //     } else {
-  //       localStorage.removeItem("user");
-  //     }
-
-  //     // update Login status
-  //     const loginUser = { accountName, password, isLogin: true };
-  //     sessionStorage.setItem("login", JSON.stringify(loginUser));
-
-  //     // navigation
-  //     setTimeout(() => {
-  //       navigate("/");
-  //     }, 1000);
-  //   }
-  // }, [msg]);
-
   const handleLogin = async (e) => {
     e.preventDefault();
-    // setMsg("");
-    // if (!accountName || !password) {
-    //   setMsg("Vui lòng nhập tên tài khoản và mật khẩu!");
-    //   return;
-    // }
-    // try {
-    //   const res = await fetch("http://localhost:5001/api/login", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({ accountName, password }),
-    //   });
-    //   const data = await res.json();
-    //   setMsg(data.msg);
-    // } catch (err) {
-    //   setMsg("Có lỗi xảy ra. Thử lại sau.");
-    // }
-    // setLoading(false);
     setLoading(true);
 
     try {
@@ -104,6 +33,7 @@ const Login = () => {
       setUser(data?.data);
       navigate("/"); 
     } catch (error) {
+      console.log(error);
       messageApi.open({
         type: "error",
         content: error?.data?.email,
@@ -113,9 +43,6 @@ const Login = () => {
   };
   if (loading) return <Spin />;
 
-  // if (login.isLogin) {
-  //   return <LoggedInAlready login={login} setLogin={setLogin} />;
-  // }
 
   if (user && Object.keys(user).length > 0) {
     return <LoggedInAlready login={user} setLogin={setUser} />;
@@ -123,6 +50,7 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-indigo-200 via-purple-200 to-pink-200">
+      {contextHolder}
       <BackToHomeButton />
       <form
         onSubmit={handleLogin}
@@ -166,23 +94,6 @@ const Login = () => {
             autoComplete="current-password"
           />
         </div>
-        {/* <div className="flex justify-center items-center gap-1.5">
-          <input
-            type="checkbox"
-            id="user"
-            name="user"
-            className="w-fit"
-            checked={checkbox}
-            onChange={(e) => {
-              if (e.target.checked) {
-                setCheckBox(true);
-              } else {
-                setCheckBox(false);
-              }
-            }}
-          />
-          <label htmlFor="user">remember me</label>
-        </div> */}
         <button
           type="submit"
           disabled={loading}
@@ -217,13 +128,6 @@ const Login = () => {
             "Đăng nhập"
           )}
         </button>
-        {/* <div
-          className={`text-center min-h-[24px] text-[15px] ${
-            msg === "Correct bro" ? "text-green-600" : "text-red-500"
-          }`}
-        >
-          {msg}
-        </div> */}
         <div className="text-center text-gray-500 mt-1">
           Chưa có tài khoản?{" "}
           <a

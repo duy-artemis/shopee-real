@@ -4,11 +4,11 @@ import { useProductStore } from "../../stores/shop/useProductStore";
 import purchaseApi from "../../services/apis/purchase.api";
 
 const Cart = () => {
-  const [items, setItems] = useState([]);
   const navigate = useNavigate();
-  const { setCheckOut } = useProductStore();
+  const { setCheckOut, setCart, cart } = useProductStore();
+  const [items, setItems] = useState(cart);
 
-
+  console.log(cart);
   let totalCart = items.length > 0 ? items.reduce((sum, item) => sum + item.price, 0) : 0;
 
   // Calculate checkout
@@ -28,6 +28,9 @@ const Cart = () => {
   }
 
   useEffect(()=>{
+    if (items.length > 0) {
+      return;
+    }
     loadPurchases();
   },[])
 
