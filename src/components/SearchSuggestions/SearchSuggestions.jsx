@@ -2,7 +2,7 @@ import React from 'react'
 import { useProductStore } from '../../stores/shop/useProductStore'
 import { NavLink } from "react-router-dom"
 
-const SearchSuggestions = ({ searchTerm }) => {
+const SearchSuggestions = ({ searchTerm, setTerm }) => {
   const { products } = useProductStore();
 
   if (!searchTerm) return null;
@@ -21,8 +21,8 @@ const SearchSuggestions = ({ searchTerm }) => {
             key={item._id}
             to={`/shop/${item.category.name === "Áo thun" ? "fashion" : "mobile-tablet"}/${item._id}`} 
             className="flex items-center gap-3 px-4 py-2 cursor-pointer hover:bg-pink-50 border-b last:border-b-0 transition"
-            onClick={e => {
-              
+            onClick={() => {
+              setTerm('');
             }}
           >
             {item.image && (

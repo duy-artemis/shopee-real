@@ -40,15 +40,15 @@ const Footer = () => (
         <div className="font-bold mb-4 text-base">PAYMENT</div>
         <div className="grid grid-cols-3 gap-2 mb-5">
           <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" className="w-9 h-6 object-contain bg-white rounded shadow" />
-          <img src="https://cdn.sstatic.net/Img/mastercard.png" alt="Mastercard" className="w-9 h-6 object-contain bg-white rounded shadow" />
-          <img src="https://cdn.sstatic.net/Img/discover.png" alt="Discover" className="w-9 h-6 object-contain bg-white rounded shadow" />
+          <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" className="w-9 h-6 object-contain bg-white rounded shadow" />
+          <img src="https://upload.wikimedia.org/wikipedia/commons/4/40/JCB_logo.svg" alt="Discover" className="w-9 h-6 object-contain bg-white rounded shadow" />
           {/* Thay bằng icon thật ở dự án, đây demo */}
         </div>
         <div className="font-bold mb-4 text-base mt-5">LOGISTICS</div>
         <div className="grid grid-cols-3 gap-2">
-          <img src="https://theme.hstatic.net/200000722513/1000962353/14/carrier_4.png" alt="SPX" className="w-12 h-6 object-contain bg-white rounded shadow" />
-          <img src="https://theme.hstatic.net/200000722513/1000962353/14/carrier_5.png" alt="Vietnam Post" className="w-12 h-6 object-contain bg-white rounded shadow" />
-          <img src="https://theme.hstatic.net/200000722513/1000962353/14/carrier_3.png" alt="Viettel" className="w-12 h-6 object-contain bg-white rounded shadow" />
+          <img src="https://images.seeklogo.com/logo-png/49/1/spx-express-indonesia-logo-png_seeklogo-499970.png" alt="SPX" className="w-12 h-6 object-contain bg-white rounded shadow" />
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_9Jmhd9Tp4ztLx_HbqspYUuJONJTx84pN0g&s" alt="Vietnam Post" className="w-12 h-6 object-contain bg-white rounded shadow" />
+          <img src="https://images.seeklogo.com/logo-png/39/2/viettel-fc-logo-png_seeklogo-397950.png" alt="Viettel" className="w-12 h-6 object-contain bg-white rounded shadow" />
           {/* Thay link ảnh phù hợp */}
         </div>
       </div>
@@ -65,7 +65,7 @@ const Footer = () => (
       <div>
         <div className="font-bold mb-4 text-base">SHOPEE APP DOWNLOAD</div>
         <div className="flex gap-2 items-center">
-          <img src="https://chart.googleapis.com/chart?chs=90x90&cht=qr&chl=https://shopee.vn" alt="QR Download" className="w-20 h-20 bg-white rounded" />
+          <img src="https://www.svgrepo.com/show/326769/qr-code-outline.svg" alt="QR Download" className="w-20 h-20 bg-white rounded" />
           <div className="flex flex-col gap-2">
             <img src="https://cdn.iconscout.com/icon/free/png-256/apple-847-675472.png" alt="App Store" className="w-24 h-6 object-contain" />
             <img src="https://cdn.iconscout.com/icon/free/png-256/google-play-47-434167.png" alt="Google Play" className="w-24 h-6 object-contain" />
