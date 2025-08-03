@@ -79,7 +79,7 @@ const ThankYou = () => {
             Về trang chủ
           </Link>
           <Link
-            to="/orders"
+            to="/orders/1"
             className="text-pink-500 underline font-medium hover:text-pink-700 transition"
           >
             Xem lịch sử đơn hàng

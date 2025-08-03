@@ -23,10 +23,10 @@ const AllProduct = () => {
 
 
   useEffect(()=>{
-    if (data.length > 0) {
+    if (data.length === 0) {
+      fetchAll();
       return;
     }
-    fetchAll();
   }, []);
 
   

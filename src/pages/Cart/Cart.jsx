@@ -5,8 +5,8 @@ import purchaseApi from "../../services/apis/purchase.api";
 
 const Cart = () => {
   const navigate = useNavigate();
-  const { setCheckOut, setCart, cart, fetchAll } = useProductStore();
-  const [items, setItems] = useState(cart);
+  const { setCheckOut, setCart, cart, fetchAll, fetchCart } = useProductStore();
+  const items = cart;
 
   console.log(cart);
   let totalCart = items.length > 0 ? items.reduce((sum, item) => sum + item.price, 0) : 0;
@@ -21,17 +21,11 @@ const Cart = () => {
 
   console.log(checkout);
 
-  let loadPurchases = async () => {
-    const response = await purchaseApi.getPurchases({status: -1});
-    setItems(response.data);
-    console.log(response);
-  }
 
   useEffect(()=>{
     if (items.length > 0) {
       return;
     }
-    loadPurchases();
     fetchAll();
   },[])
 
@@ -88,12 +82,12 @@ const Cart = () => {
                         onClick={async()=>{
                           if (item.buy_count <= 1) {
                             await purchaseApi.deletePurchase([item._id]);
-                            loadPurchases();
+                            fetchCart();
                             return;
                           }
                           let newCount = item.buy_count - 1;
                           await purchaseApi.updatePurchase({product_id: item.product._id, buy_count: newCount});
-                          loadPurchases();
+                          fetchCart();
                         }}
                         // disabled={item.buy_count <= 1}
                     >-</button>
@@ -103,7 +97,7 @@ const Cart = () => {
                         onClick={async()=>{
                           let newCount = item.buy_count + 1;
                           await purchaseApi.updatePurchase({product_id: item.product._id, buy_count: newCount});
-                          loadPurchases();
+                          fetchCart();
                         }}
                     >+</button>
                     <span className="ml-2">{item.price.toLocaleString()} VND</span>
@@ -113,7 +107,7 @@ const Cart = () => {
                     className="text-red-500 hover:underline ml-6 cursor-pointer"
                     onClick={async () => {
                     await purchaseApi.deletePurchase([item._id]);
-                    loadPurchases();
+                    fetchCart();
                     }}
                 >
                     Remove
@@ -128,7 +122,7 @@ const Cart = () => {
               <button
                 onClick={async()=>{
                   await purchaseApi.buyProducts(checkout);
-                  loadPurchases();
+                  fetchCart();
                   setCheckOut(items);
                   setTimeout(()=>{
                     navigate('/thank-you');

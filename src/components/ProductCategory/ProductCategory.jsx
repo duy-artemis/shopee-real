@@ -9,7 +9,7 @@ import { useProductStore } from '../../stores/shop/useProductStore';
 
 const ProductCategory = () => {
   const param = useParams();
-  const {products, setProduct, setCart, fetchAll} = useProductStore();
+  const {products, setProduct, setCart, fetchAll, fetchProducts} = useProductStore();
 
   console.log(products);
   const paramCheked = [
@@ -42,10 +42,10 @@ const ProductCategory = () => {
 
 
   useEffect(()=>{
-    setTimeout(()=>{
-      loadProducts();
+    if (data.length === 0) {
       fetchAll();
-    }, 1000)
+      return;
+    }
   }, []);
 
   

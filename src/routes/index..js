@@ -3,6 +3,7 @@ import { Homepage, Login, PageNotFound, Shop, Signup, TrangSuc } from "../pages"
 import Cart from "../pages/Cart/Cart";
 import ThankYou from "../pages/ThankYou/ThankYou";
 import ShopRoutes from "./Shop/ShopRoutes";
+import OrderRoutes from "./OrderRoutes/OrderRoutes";
 
 export const ROUTES = [
   {
@@ -44,5 +45,10 @@ export const ROUTES = [
     key: 8,
     path: "/thank-you",
     component: ThankYou
+  },
+  {
+    key: 9,
+    path: "/orders/*",
+    component: OrderRoutes
   }
 ];

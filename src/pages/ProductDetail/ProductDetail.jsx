@@ -12,7 +12,7 @@ import { Spin } from 'antd'
 const ProductDetail = () => {
   const { id } = useParams()
   const { products, setCart, setProduct, fetchAll } = useProductStore();
-  const [productDetail, setProductDetail] = useState(products.filter((item)=>item._id === id));
+  const productDetail = products.filter((item)=>item._id === id);
   const [productDescription, setProductDescription] = useState(null);
   const [image, setImage] = useState();
   const navigate = useNavigate();
@@ -26,22 +26,11 @@ const ProductDetail = () => {
     setProductDescription(description);
   }
 
-  const loadProductDetail = async function name(params) {
-    const res = await productApi.getProductDetail(id);
-    const description = he.decode(res.data.description);
-    setProductDetail(res.data);
-    setProductDescription(description);
-  }
-  
-
   useEffect(() => {
-    loadProductDescription();
-    if (productDetail.length > 0) {
-      return;
+    if (productDetail.length === 0) {
+      fetchAll();
     }
-    // If user click reload
-    loadProductDetail();
-    fetchAll();
+    loadProductDescription();
   }, []);
 
   const product = Array.isArray(productDetail)
