@@ -8,10 +8,12 @@ export const useProductStore = create((set) => ({
   checkout: [],
   cart: [],
   profileDetail: {},
+  paids: [],
   setProduct: (data) => set({ products: data }),
   setCheckOut: (data) => set({ checkout: data }),
   setCart: (data) => set({ cart: data }),
   setProfileDetail: (data) => set({ profileDetail: data }),
+  setCart: (data) => set({paid: data}),
 
   // Fetch all
   fetchAll: async () => {
@@ -20,6 +22,9 @@ export const useProductStore = create((set) => ({
 
     const cart = await purchaseApi.getPurchases({ status: -1 });
     set({ cart: cart.data });
+
+    const paids = await purchaseApi.getPurchases({ status: 1 });
+    set({ paids: paids.data });
 
     const profile = await userApi.getProfile();
     set({ profileDetail: profile.data });

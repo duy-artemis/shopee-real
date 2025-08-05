@@ -7,8 +7,7 @@ import { useProductStore } from "../../stores/shop/useProductStore";
 import Password from "antd/es/input/Password";
 
 const LoggedInAlready = ({ login, setLogin }) => {
-  const {profileDetail, setProfileDetail, fetchAll, fetchProfile} = useProductStore();
-  // const [profile, setProfile] = useState(profileDetail);
+  const {profileDetail, setProduct, setProfileDetail, setCheckOut, setCart, fetchAll, fetchProfile} = useProductStore();
   const profile = profileDetail;
   const [showEditInfo, setShowEditInfo] = useState(false);
   const [showEditAvatar, setShowEditAvatar] = useState(false);
@@ -21,12 +20,6 @@ const LoggedInAlready = ({ login, setLogin }) => {
   const navigate = useNavigate();
 
   const inputElement = useRef();
-
-  // const loadProfile = async () => {
-  //   const response = await userApi.getProfile();
-  //   setProfileDetail(response.data);
-  //   setProfile(response.data);
-  // };
 
   
   useEffect(() => {
@@ -276,7 +269,13 @@ const LoggedInAlready = ({ login, setLogin }) => {
         <div className="flex flex-col w-full gap-3 mt-4">
           <button
             className="w-full py-3 bg-gradient-to-r from-pink-500 via-indigo-500 to-blue-500 hover:brightness-110 text-white rounded-xl font-semibold shadow transition text-lg cursor-pointer"
-            onClick={() => setLogin(null)}
+            onClick={() => {
+              setLogin(null);
+              setProduct([]);
+              setCart([]);
+              setCheckOut([]);
+              setProfileDetail({});
+            }}
           >
             Đăng xuất
           </button>

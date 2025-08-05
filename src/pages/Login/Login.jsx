@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import LoggedInAlready from "./LogInAlready";
 import BackToHomeButton from "../../components/Button/BackToHomeButton";
 import authApi from "../../services/apis/auth.api";
 import { message, Spin } from "antd";
+import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import authStore from "../../stores/auth/authStore";
 
 const Login = () => {
@@ -11,14 +12,20 @@ const Login = () => {
   const navigate = useNavigate();
   const [accountName, setAccountName] = useState();
   const [password, setPassword] = useState();
+  const [showPassword, setShowPassword] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const { setUser, user } = authStore();
-  
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    if (!accountName || !password) {
+      messageApi.open({
+        type: "warning",
+        content: "Vui lòng nhập đầy đủ thông tin",
+      });
+      return;
+    }
     setLoading(true);
-
     try {
       const data = await authApi.login({
         email: accountName,
@@ -29,21 +36,22 @@ const Login = () => {
         content: data?.message,
       });
       // console.log(data);
-      setLoading(false);
       setUser(data?.data);
-      navigate("/"); 
+      setTimeout(() => {
+        setLoading(false);
+        navigate("/");
+      }, 3000);
     } catch (error) {
       console.log(error);
       messageApi.open({
         type: "error",
-        content: Object.values(error?.data).join(', '),
+        content: Object.values(error?.data).join(", "),
       });
       setLoading(false);
     }
   };
 
-
-  if (user && Object.keys(user).length > 0) {
+  if (user && Object.keys(user).length > 0 && !loading) {
     return <LoggedInAlready login={user} setLogin={setUser} />;
   }
 
@@ -83,15 +91,24 @@ const Login = () => {
           >
             Mật khẩu
           </label>
-          <input
-            id="password"
-            type="password"
-            className="w-full px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Nhập mật khẩu"
-            autoComplete="current-password"
-          />
+          <div className="relative">
+            <input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              className="w-full px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Nhập mật khẩu"
+              autoComplete="current-password"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-indigo-500 transition-colors"
+            >
+              {showPassword ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+            </button>
+          </div>
         </div>
         <button
           type="submit"
@@ -129,12 +146,12 @@ const Login = () => {
         </button>
         <div className="text-center text-gray-500 mt-1">
           Chưa có tài khoản?{" "}
-          <a
-            href="/signup"
+          <NavLink
+            to="/signup"
             className="text-indigo-500 hover:underline font-medium"
           >
             Đăng ký
-          </a>
+          </NavLink>
         </div>
       </form>
     </div>

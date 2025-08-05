@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import purchaseApi from "../../services/apis/purchase.api";
 import { Spin, Tabs, Tag } from "antd";
 import { HomeOutlined, PictureOutlined } from "@ant-design/icons";
+import { useProductStore } from "../../stores/shop/useProductStore";
 
 const statusLabels = {
   1: "Đã hoàn tất",
@@ -17,26 +18,20 @@ const statusColors = {
 const OrderDashboard = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
-  const [orders, setOrders] = useState([]);
   const [tab, setTab] = useState(id === "-1" || id === "1" ? id : "-1");
   const navigate = useNavigate();
+  const {fetchAll, cart, paids} = useProductStore();
+  const orders = tab === "-1" ? cart : paids
 
-  const fetchOrders = async (status) => {
-    setLoading(true);
-    try {
-      const res = await purchaseApi.getPurchases({ status: Number(status) });
-      setOrders(res.data || []);
-      // console.log(res.data)
-    } catch (err) {
-      setOrders([]);
-    }
-    setLoading(false);
-  };
+
+  console.log(orders);
+
 
   useEffect(() => {
-    fetchOrders(tab);
-    // eslint-disable-next-line
-  }, [tab]);
+    if (orders.length === 0) {
+      fetchAll();
+    }
+  }, []);
 
   return (
     <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-lg p-8 mt-10">
