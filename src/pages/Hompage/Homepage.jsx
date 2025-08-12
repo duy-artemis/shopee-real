@@ -7,9 +7,11 @@ import withAuth from "../../hoc/withAuth";
 import productApi from "../../services/apis/product.api";
 import axios from "axios";
 import AllProduct from "../../components/AllProduct/AllProduct";
+import authStore from "../../stores/auth/authStore";
 
 const Homepage = () => {
-
+  const {user} = authStore();
+  console.log(user);
   return (
     <div>
       <Header />
